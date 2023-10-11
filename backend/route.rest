@@ -1,1 +1,38 @@
+
+### To Get All
 GET http://localhost:5001/vehicles
+
+
+### To Get One
+GET http://localhost:5001/vehicles/6526dbd23acee4d5f5b21c47
+
+
+### To add vehicle
+POST http://localhost:5001/vehicles
+Content-Type: application/json
+
+{
+   "vehicleType": "boat",
+    "make": "MasterCraft",
+    "model": "X-Star",
+    "year": 2022,
+    "image": "url/to/boat-image.jpg",
+    "capacity": 8,
+    "fuelType": "Gasoline",
+    "bookedTimeSlots": [],
+    "availability": true,
+    "rentPerHour": 89.99
+}
+
+
+### To delete
+DELETE http://localhost:5001/vehicles/6526ec9cd7562b897a11ca4e
+
+
+### To update
+PATCH http://localhost:5001/vehicles/6526ec9cd7562b897a11ca4e
+Content-Type: application/json
+
+{
+    "image": "https://pngimg.com/d/mercedes_PNG80175.png"
+}
