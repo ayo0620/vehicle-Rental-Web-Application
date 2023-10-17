@@ -1,16 +1,18 @@
 require('dotenv').config()
 
-const PORT = process.env.PORT || 5001
-const express = require('express')
-const app = express()
-const mongoose = require('mongoose')
+const PORT = process.env.PORT || 5001;
+const express = require('express');
+const app = express();
+const mongoose = require('mongoose');
+const cors = require('cors');
 
-mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true})
-const db = mongoose.connection
-db.on('error', (error) => console.error(error))
-db.once('open', () => console.log('Connected to Database'))
+mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true});
+const db = mongoose.connection;
+db.on('error', (error) => console.error(error));
+db.once('open', () => console.log('Connected to Database'));
 
-app.use(express.json())
+app.use(cors({origin: 'http://localhost:3000'}));
+app.use(express.json());
 
 const vehiclesRouter = require('./routes/Vehicles')
 app.use('/vehicles', vehiclesRouter)

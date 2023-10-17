@@ -1,0 +1,33 @@
+.listing-item {
+    border: 1px solid #ccc;
+    padding: 2px;
+    margin: 10px;
+    width: 350px;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.listing-item img{
+    width: 100%;
+    /* height: 100%; */
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.vehicle-details {
+    text-align: center;
+}
+
+.title {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.sub-title {
+    display: flex; 
+}
+
+.sub-title p{
+    margin-left: 80px;
+}
+

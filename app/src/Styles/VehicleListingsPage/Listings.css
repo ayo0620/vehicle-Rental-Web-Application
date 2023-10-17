@@ -1,0 +1,9 @@
+.listings {
+    width: 100%;
+}
+
+.listings-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}

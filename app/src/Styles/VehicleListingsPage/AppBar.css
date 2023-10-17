@@ -1,0 +1,10 @@
+.app-bar {
+    position: static;
+    background: #fff;
+    margin-bottom: 5px;
+    padding: 5px;
+}
+
+.app-bar h3 {
+    text-align: center;
+}

@@ -1,0 +1,26 @@
+.sidebar {
+    width: 250px;
+    padding: 20px;
+    border-right: 1px solid #ccc;
+    background-color: #FFF;
+  }
+  
+  .sidebar-section {
+    margin-bottom: 15px;
+  }
+  
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+  
+  .section-options {
+    margin: 20px;
+  }
+
+  .selected-brand {
+    box-shadow: 0 0 5px #00f;
+    border-radius: 4px;
+  }
+  
