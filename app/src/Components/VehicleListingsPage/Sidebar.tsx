@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { Checkbox } from "@mui/material";
+import { Checkbox, typographyClasses } from "@mui/material";
 import {Slider} from "@mui/material";
 import { Grid } from "@mui/material";
 import { FormControlLabel } from "@mui/material";
@@ -10,17 +10,30 @@ interface Brand {
     logoUrl: string;
 }
 
-const Sidebar: React.FC = () => {
+interface sidebarProps {
+    applyFilters: (filters: any) => void;
+}
+
+interface Filters {
+    vehicleTypes: string[];
+    brands: string[];
+    priceRange: [number, number]
+}
+
+const Sidebar: React.FC<sidebarProps> = ({ applyFilters }) => {
   const [vehicleTypeOpen, setVehicleTypeOpen] = useState(false);
   const [brandOpen, setBrandOpen] = useState(false);
   const [priceRangeOpen, setPriceRangeOpen] = useState(false);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [selectedVehicleTypes, setSelectedVehicleTypes] = useState<string[]>([]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 20000]);
+  
 
   const toggleVehicleType = () => setVehicleTypeOpen(!vehicleTypeOpen);
   const toggleBrand = () => setBrandOpen(!brandOpen);
   const togglePriceRange = () => setPriceRangeOpen(!priceRangeOpen);
 
-  const vehicleTypes = ['Car', 'Skateboards', 'Bicycles', 'Motorcycles', 'Jet Ski', 'Boat'];
+  const vehicleTypes = ['car', 'skateboard', 'bicycle', 'motorcycle', 'jet_ski', 'boat'];
   const brands: Brand[] = [
     { name: 'Toyota', logoUrl: 'https://global.toyota/pages/global_toyota/mobility/toyota-brand/emblem_ogp_001.png'}, 
     { name: 'Honda', logoUrl: 'https://www.carlogos.org/car-logos/honda-logo.png'}, 
@@ -37,13 +50,36 @@ const Sidebar: React.FC = () => {
 
   const handleBrandClick = (brandName: string) => {
     setSelectedBrands((prevSelected) => {
-        if (prevSelected.includes(brandName)){
-            return prevSelected.filter((brand) => brand !== brandName);
-        } else {
-            return [...prevSelected, brandName];
-        }
-    })
-  }
+      if (prevSelected.includes(brandName)) {
+        return prevSelected.filter((brand) => brand !== brandName);
+      } else {
+        return [...prevSelected, brandName];
+      }
+    });
+  };
+
+
+  const handleVehicleTypeChange = (vehicleType: string) => {
+    setSelectedVehicleTypes((prevSelected) => {
+      if (prevSelected.includes(vehicleType)) {
+        return prevSelected.filter((type) => type !== vehicleType);
+      } else {
+        return [...prevSelected, vehicleType];
+      }
+    });
+  };
+  
+
+  const applyFiltersHandler = () => {
+    const filters: Filters = {
+      vehicleTypes: selectedVehicleTypes,
+      brands: selectedBrands,
+      priceRange: priceRange,
+    };
+
+    applyFilters(filters);
+  };
+
 
 
   return (
@@ -61,6 +97,7 @@ const Sidebar: React.FC = () => {
                     key={type}
                     control={<Checkbox/>}
                     label={type}
+                    onClick={() => handleVehicleTypeChange(type)}
                 />
             ))}
           </div>
@@ -101,7 +138,8 @@ const Sidebar: React.FC = () => {
         {priceRangeOpen && (
           <div className="section-options">
             <Slider
-                defaultValue={[0, 20000]}
+                value={priceRange}
+                onChange={(_, newValue) => setPriceRange(newValue as [number, number])}
                 valueLabelDisplay="auto"
                 min={0}
                 max={10000}
@@ -111,6 +149,9 @@ const Sidebar: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Apply Filters Button */}
+      <button onClick={applyFiltersHandler}>Apply Filters</button>
     </div>
   );
 };

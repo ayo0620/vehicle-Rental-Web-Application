@@ -1,8 +1,10 @@
 .sidebar {
     width: 250px;
+    height: 800px;
     padding: 20px;
     border-right: 1px solid #ccc;
     background-color: #FFF;
+    position: sticky;
   }
   
   .sidebar-section {

@@ -20,28 +20,26 @@ interface Vehicle {
     rentPerHour: number;
 }
 
-const Listings: React.FC = () => {
+interface ListingsProps {
+    vehicles: Vehicle[];
+}
 
-    const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-
-
-    useEffect(() => {
-        fetch('http://localhost:5001/vehicles')
-        .then((response) => response.json())
-        .then((data) => setVehicles(data))
-        .catch((error) => console.error('Error fetching data:', error));
-    }, []);
-
+const Listings: React.FC<ListingsProps> = ({ vehicles }) => {
 
     return (
-        <div className="listings">
-            <div className="listings-grid">
-                {vehicles.map((vehicle) => (
-                    <VehicleItem key={vehicle._id} vehicle={vehicle} />
-                ))}
+        <>
+            <div className="listings">
+                <div className="listings-grid">
+                    {vehicles.map((vehicle) => (
+                        <VehicleItem key={vehicle._id} vehicle={vehicle} />
+                    ))}
+                </div>
             </div>
 
-        </div>
+            {
+                
+            }
+        </>
     );
 }
 

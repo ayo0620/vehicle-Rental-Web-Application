@@ -13,11 +13,6 @@ router.get('/', async (req, res) => {
     }
 })
 
-// Getting One
-router.get('/:id', getVehicle, (req, res) => {
-    res.json(res.vehicle)
-})
-
 // Creating
 router.post('/', async (req, res) => {
     const vehicle = new Vehicle({
@@ -40,7 +35,43 @@ router.post('/', async (req, res) => {
     }
 })
 
-// Updating 
+
+// Filtering
+router.get('/filter', async (req, res) => {
+    try {
+        // Extract filter parameters from the query string
+        const { vehicleTypes, brands, priceRange } = req.query;
+
+        console.log('Filter Values:', { vehicleTypes, brands, priceRange });
+
+        // Build the filter object based on the provided parameters
+        let filter = {};
+        if (vehicleTypes) {
+            filter.vehicleType = { $in: vehicleTypes.split(',') } ;
+        }
+        if (brands) {
+            // Assuming brands is an array of brand names
+            filter.make = { $in: brands.split(',') };
+    }
+        if (priceRange) {
+        // Assuming priceRange is an array [minPrice, maxPrice]
+        const [minPrice, maxPrice] = priceRange.split(',').map(Number);
+        filter.rentPerHour = { $gte: minPrice, $lte: maxPrice };
+    }
+
+    console.log('Filter Object:', filter);
+
+
+        // Fetch vehicles based on the filter
+        const filteredVehicles = await Vehicle.find(filter);
+
+        res.json(filteredVehicles);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  });
+
+  // Updating 
 router.patch('/:id', getVehicle, async (req, res) => {
     if(req.body.vehicleType != null) {
         res.vehicle.vehicleType = req.body.vehicleType
@@ -79,6 +110,12 @@ router.patch('/:id', getVehicle, async (req, res) => {
         res.status(400).json({message: err.message})
     }
 })
+
+// Getting by id
+router.get('/:id', getVehicle, (req, res) => {
+    res.json(res.vehicle);
+  });
+
 
 // Deleting
 router.delete('/:id', getVehicle, async (req, res) => {
