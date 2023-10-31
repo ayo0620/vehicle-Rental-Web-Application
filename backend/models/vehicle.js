@@ -50,7 +50,23 @@ const vehicleSchema = new mongoose.Schema({
     rentPerHour: {
         type: Number,
         required: true
-    }
+    },
+
+    description: {
+        type: String,
+    },
+    reviews: [
+        { 
+            user: {
+                    type: String,
+                    required: true,
+                  },
+            comment: {
+                        type: String,
+                        required: true,
+                    },
+        }
+    ]
 })
 
 module.exports = mongoose.model('vehicle', vehicleSchema)

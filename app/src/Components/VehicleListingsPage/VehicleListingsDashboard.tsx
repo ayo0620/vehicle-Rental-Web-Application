@@ -1,26 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { Vehicle } from "../../types/Vehicle";
 import AppBar from './AppBar';
 import Listings from './Listings';
 import Sidebar from './Sidebar';
 import { Alert } from '@mui/material';
 import '../../Styles/VehicleListingsPage/VehicleListingsDashboard.css';
-
-interface Vehicle {
-    _id: string;
-    vehicleType: string;
-    make: string;
-    model: string;
-    year: number;
-    image: string;
-    capacity: number;
-    fuelType: string;
-    bookedTimeSlots: {
-      from: string;
-      to: string;
-    }[];
-    availability: boolean;
-    rentPerHour: number;
-}
 
   
 interface vehicleFilters {

@@ -21,7 +21,9 @@ Content-Type: application/json
     "fuelType": "Gasoline",
     "bookedTimeSlots": [],
     "availability": true,
-    "rentPerHour": 89.99
+    "rentPerHour": 89.99,
+    "description": "",
+    "reviews": []
 }
 
 
