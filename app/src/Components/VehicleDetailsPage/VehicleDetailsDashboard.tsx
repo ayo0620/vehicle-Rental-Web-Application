@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Vehicle } from "../../types/Vehicle";
-import { useParams } from "react-router-dom";
+import { useParams, Link} from "react-router-dom";
 import { FaUsers } from "react-icons/fa";
 import { FaGasPump } from "react-icons/fa";
 import '../../Styles/VehicleDetailsPage/VehicleDetailsDashboard.css';
@@ -11,6 +11,15 @@ interface VehicleDetailProps {
     vehicle: Vehicle
 }
 
+interface LocationState {
+    vehicleImage: string;
+    vehicleName: string;
+    pickUpDate: string;
+    returnDate: string;
+    numberOfDays: number;
+    renterPerDay: number;
+  }
+
 const VehicleDetailsDashbaord: React.FC= () => {
     const { id } = useParams<{ id: string }>();
     const [vehicle, setVehicle] = useState<Vehicle | null>(null);
@@ -19,6 +28,7 @@ const VehicleDetailsDashbaord: React.FC= () => {
     const [pickUpTime, setPickUpTime] = useState<string>('');
     const [returnTime, setReturnTime] = useState<string>('');
     const [totalCharge, setTotalCharge] = useState<number | null>(null);
+    const [timeDiffInDays, setTimeDiffInDays] = useState<number>(0); // Declare here
 
     useEffect(() => {
         const fetchVehicleDetails = async () => {
@@ -44,11 +54,19 @@ const VehicleDetailsDashbaord: React.FC= () => {
         const returnDateTime = new Date(`${returnDate}T${returnTime}`) as any;
 
         const timeDiffInHours = (returnDateTime - pickUpDateTime) / (1000 * 60 * 60* 24);
+        const timeDiffInMilliseconds = returnDateTime.getTime() - pickUpDateTime.getTime();
+        const timeDiffInDays = timeDiffInMilliseconds / (1000 * 60 * 60 * 24);
+
+        setTimeDiffInDays(timeDiffInHours); 
 
         // Calculate total charge
         const totalCharge = ratePerHour * timeDiffInHours;
         setTotalCharge(totalCharge);
     };
+
+
+
+
 
     return (
         <>
@@ -119,7 +137,19 @@ const VehicleDetailsDashbaord: React.FC= () => {
                         </div>
                             <br></br>
                         <div className="checkout-btn">
+                        <Link 
+                            to={`/vehicleListings/vehicle/checkout/${id}`}
+                            state={{
+                                vehicleImage: vehicle.image,
+                                vehicleName: `${vehicle.make} ${vehicle.model} ${vehicle.year}`,
+                                pickUpDate,
+                                returnDate,
+                                numberOfDays: totalCharge !== null ? Math.ceil(timeDiffInDays) : 0,
+                                rentPerDay: vehicle.rentPerHour,
+                            }}
+                            >
                             <Button variant="contained" color="primary">Proceed to Checkout</Button>
+                        </Link>
                         </div>
                     </div>
                 </div>
