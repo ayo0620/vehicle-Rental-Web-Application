@@ -10,23 +10,22 @@ interface CheckoutSidePanelProps{
     numberOfDays: number;
     rentPerDay: number;
     protectionPlan: string;
+    setTotalAmountWithTax: React.Dispatch<React.SetStateAction<number>>; 
+
 }
 
-interface SidePanelProps {
-    protectionPlan: string;
-}
-
-const SidePanel: React.FC<CheckoutSidePanelProps> = ({vehicleImage, vehicleName, pickUpDate, returnDate, numberOfDays, rentPerDay, protectionPlan}) => {
+const SidePanel: React.FC<CheckoutSidePanelProps> = ({vehicleImage, vehicleName, pickUpDate, returnDate, numberOfDays, rentPerDay, protectionPlan, setTotalAmountWithTax}) => {
 
     const totalAmount = rentPerDay * numberOfDays;
-
     const taxRate = 0.0925;
     const taxAmount = totalAmount * taxRate;
-
     const protectionPlanAmount = protectionPlan === "standard" ? 80 : 40;
     const protectionPlanTotalAmount = protectionPlanAmount * numberOfDays;
-
     const totalAmountWithTax = totalAmount + taxAmount + protectionPlanTotalAmount;
+
+    React.useEffect(() => {
+        setTotalAmountWithTax(totalAmountWithTax);
+      }, [setTotalAmountWithTax, totalAmountWithTax]);
 
     return(
         <div className="sidepanel-container">
@@ -52,9 +51,9 @@ const SidePanel: React.FC<CheckoutSidePanelProps> = ({vehicleImage, vehicleName,
                 </div>
             </div>
 
-            <div className="book-trip-btn">
+            {/* <div className="book-trip-btn">
                 <Button variant="contained" color="primary">Book Trip</Button>
-            </div>
+            </div> */}
             
         </div>
     )

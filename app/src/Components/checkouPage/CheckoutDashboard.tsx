@@ -17,12 +17,12 @@ interface LocationState {
 
 const CheckoutDashboard: React.FC = () => {
     const location = useLocation();
+    const { state } = location || {};
+    const { vehicleImage, vehicleName, pickUpDate, returnDate, numberOfDays, rentPerDay } = state || {};
+    const [selectedProtectionPlan, setSelectedProtectionPlan] = useState<string>("");
+    const [totalAmountWithTax, setTotalAmountWithTax] = useState<number>(0); // New state for total amount
 
-//   const { state } = location;
-  const { state } = location || {};
-  const { vehicleImage, vehicleName, pickUpDate, returnDate, numberOfDays, rentPerDay } = state || {};
-  const [selectedProtectionPlan, setSelectedProtectionPlan] = useState<string>("");
-  
+
   if (!state) {
     // Handle the case where state is not available
     return <div>Error: No state found</div>;
@@ -30,11 +30,16 @@ const CheckoutDashboard: React.FC = () => {
 
   const handleProtectionPlanChange = (plan: string) => {
     setSelectedProtectionPlan(plan);
+
   };
 
   return (
+    <>
     <div className='checkout-page-containter'>
-      <Checkout onProtectionPlanChange={handleProtectionPlanChange}/>
+      <Checkout 
+        onProtectionPlanChange={handleProtectionPlanChange}
+        totalAmountWithTax={totalAmountWithTax}
+      />
       <SidePanel
         vehicleImage={vehicleImage} 
         vehicleName={vehicleName}
@@ -42,9 +47,12 @@ const CheckoutDashboard: React.FC = () => {
         returnDate={returnDate}
         numberOfDays={numberOfDays}
         rentPerDay={rentPerDay}
-        protectionPlan={selectedProtectionPlan} 
+        protectionPlan={selectedProtectionPlan}
+        setTotalAmountWithTax={setTotalAmountWithTax}
        />
     </div>
+
+    </>
 
   );
 };

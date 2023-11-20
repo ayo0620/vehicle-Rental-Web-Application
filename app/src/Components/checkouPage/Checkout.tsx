@@ -12,18 +12,20 @@ import {
     RadioGroup,
   } from '@mui/material';
 import { FaCreditCard, FaCcDiscover } from "react-icons/fa";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import PaymentForm from "./PaymentForm";
 import '../../Styles/CheckoutPage/Checkout.css';
 
 interface CheckoutProps {
     onProtectionPlanChange: (plan: string) => void;
+    totalAmountWithTax: number;
 }
 
-const Checkout: React.FC<CheckoutProps> = ({ onProtectionPlanChange }) => {
-
+const Checkout: React.FC<CheckoutProps> = ({ onProtectionPlanChange, totalAmountWithTax }) => {
+    const PUBLIC_KEY = "pk_test_51OBSk7GevQbRHFh3QRj00qKa6bU5HQ7DrbGLScBRywkZEAKzOY3Xs0SsVPxxh5RKFMUHfmjCxf75Z7hdRqLKtYFz00GcJPBU5W";
+    const stripePromise = loadStripe(PUBLIC_KEY);
     const [protectionPlan, setProtectionPlan] = useState<string>('');
-    const [paymentMethod, setPaymentMethod] = useState<string>('');
-    // const [selectedProtectionPlan, setSelectedProtectionPlan] = useState<string>("");
-
   
     const handleProtectionPlanChange = (plan: string) => {
         if (protectionPlan === plan) {
@@ -33,12 +35,7 @@ const Checkout: React.FC<CheckoutProps> = ({ onProtectionPlanChange }) => {
           onProtectionPlanChange(plan)
         }
     };
-  
-    const handlePaymentMethodChange = (
-      event: React.ChangeEvent<{ value: unknown }>
-    ) => {
-      setPaymentMethod(event.target.value as string);
-    };
+
   
     // Payment method implementation goes here
   
@@ -80,31 +77,15 @@ const Checkout: React.FC<CheckoutProps> = ({ onProtectionPlanChange }) => {
         <hr />
   
         {/* Payment Method Section */}
-        <Typography variant="h6" gutterBottom>
+        <Typography style={{fontWeight: 'bold', fontSize: '22px'}} variant="h6" gutterBottom>
           Payment Method
         </Typography>
-  
-        <RadioGroup
-            aria-label="payment-method"
-            name="payment-method"
-            value={paymentMethod}
-            onChange={handlePaymentMethodChange}
-        >
-        <div>
 
-        <FormControlLabel
-          value="creditCard"
-          control={<Radio />}
-          label="Debit or Credit Card"
-        />
-        
-        <FaCreditCard style={{marginLeft:'40px'}} size={25}/>
-        <FaCcDiscover  style={{marginLeft:'40px'}} size={25}/>
-        </div>
-        <FormControlLabel value="paypal" control={<Radio />} label="PayPal"/>
-      </RadioGroup>
-  
-        {/* Payment method implementation */}
+        {/* Show Payment Form */}
+            <Elements stripe={stripePromise}>
+                <PaymentForm totalAmountWithTax={totalAmountWithTax}/>
+            </Elements>
+
       </div>
     );
   };
