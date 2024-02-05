@@ -19,7 +19,7 @@ const SidePanel: React.FC<CheckoutSidePanelProps> = ({vehicleImage, vehicleName,
     const totalAmount = rentPerDay * numberOfDays;
     const taxRate = 0.0925;
     const taxAmount = totalAmount * taxRate;
-    const protectionPlanAmount = protectionPlan === "standard" ? 80 : 40;
+    const protectionPlanAmount = protectionPlan === "standard" ? 40 : 20;
     const protectionPlanTotalAmount = protectionPlanAmount * numberOfDays;
     const totalAmountWithTax = totalAmount + taxAmount + protectionPlanTotalAmount;
 

@@ -1,0 +1,65 @@
+.admin-signup-container {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    height: 100vh; 
+    background-color: #f2f2f2; 
+}
+  
+.admin-signup-form {
+    background-color: #fff; 
+    border-radius: 10px; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 400px; 
+}
+  
+.admin-signup-form h2 {
+    text-align: center; 
+    margin-bottom: 20px;
+ }
+  
+.admin-signup-form form {
+    display: flex; 
+    flex-direction: column; 
+}
+
+.admin-signup-form form div {
+    margin-bottom: 15px; 
+}
+
+.admin-signup-form form label {
+    display: block; 
+    margin-bottom: 5px; 
+}
+
+.admin-signup-form form input {
+    padding: 10px; 
+    border: 1px solid #ccc; 
+    border-radius: 3px; 
+    width: 90%;
+}
+
+.admin-signup-form form button {
+    background-color: #4CAF50; 
+    color: white;
+    padding: 10px 20px; 
+    border: none; 
+    border-radius: 3px; 
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.admin-signup-form p {
+    text-align: center; 
+    margin-top: 20px; 
+}
+
+.admin-signup-form p a {
+    color: #4CAF50; 
+    text-decoration: none; 
+}
+
+.admin-signup-form button:hover {
+    opacity: 0.8; 
+}

@@ -17,7 +17,9 @@ app.use(cors({origin: 'http://localhost:3000'}));
 app.use(express.json());
 
 const vehiclesRouter = require('./routes/Vehicles')
+const usersRouter = require('./routes/Users')
 app.use('/vehicles', vehiclesRouter);
+app.use('/users', usersRouter);
 
 app.post('/create-payment-intent', async (req, res) => {
     try {

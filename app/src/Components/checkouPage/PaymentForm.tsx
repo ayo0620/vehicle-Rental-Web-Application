@@ -4,9 +4,10 @@ import {
   Typography,
   TextField,
   Grid,
+  CircularProgress
 } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 import InputAdornment from '@mui/material/InputAdornment';
-import { FaCcMastercard, FaCcVisa, FaCcAmex } from 'react-icons/fa';
 import '../../Styles/CheckoutPage/PaymentForm.css'; // Add your CSS file for styling
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 
@@ -19,9 +20,13 @@ const PaymentForm: React.FC<PaymentFormProps> = ({totalAmountWithTax}) => {
   const elements  = useElements();
   const [nameOnCard, setNameOnCard] = useState<string>('');
   const [nameError, setNameError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
 
 
   const handlePayNow = async () => {
+    setLoading(true);
+
     if (!stripe || !elements) {
       return;
     }
@@ -38,7 +43,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({totalAmountWithTax}) => {
 
     const amountInCents = Math.round(totalAmountWithTax * 100);
 
-      // Call your server to create a PaymentIntent
+    
       const response = await fetch('http://localhost:5001/create-payment-intent', {
         method: 'POST',
         headers: {
@@ -67,11 +72,14 @@ const PaymentForm: React.FC<PaymentFormProps> = ({totalAmountWithTax}) => {
         alert("Payment failed. Please check your card details and try again.");
       } else {
         console.log(paymentIntent);
-        alert("Payment successful! Thank you for your purchase.");
+        // setNameOnCard("")
+        navigate("/confirmationPage")
       }
     } catch (error) {
         console.error(error instanceof Error ? error.message : 'An unknown error occurred.');
         alert("An error occurred. Please try again later.");
+    } finally {
+        setLoading(false);
     }
   };
 
@@ -115,8 +123,13 @@ const PaymentForm: React.FC<PaymentFormProps> = ({totalAmountWithTax}) => {
       <hr></hr>
 
       <div className="pay-now-button">
-        <Button variant="contained" color="primary" onClick={handlePayNow}>
-          Pay Now
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handlePayNow}
+          disabled={loading}
+        >
+          {loading ? <CircularProgress size={24} /> : "Pay Now"}
         </Button>
       </div>
     </div>

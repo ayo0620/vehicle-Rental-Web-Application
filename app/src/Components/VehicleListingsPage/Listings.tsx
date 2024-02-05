@@ -10,6 +10,10 @@ interface ListingsProps {
 }
 
 const Listings: React.FC<ListingsProps> = ({ vehicles }) => {
+    if (!Array.isArray(vehicles)) {
+        // Render an appropriate fallback UI or return null
+        return <div>No vehicles available</div>;
+    }
 
     return (
         <>

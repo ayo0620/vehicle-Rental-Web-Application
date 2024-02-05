@@ -27,6 +27,7 @@ const VehicleListingsDashboard: React.FC = () => {
     try {
       const response = await fetch('http://localhost:5001/vehicles');
       const data = await response.json();
+      // Check if data is an array before setting it in state
       setVehicles(data);
     } catch (error) {
       console.error('Error fetching data:', error);

@@ -8,6 +8,7 @@ import RideSection from './RideSection';
 import AboutSection from './AboutSection';
 import ServiceSection from './ServiceSection';
 
+
 const LandingPage: React.FC = () => {
     const [selectedTab, setSelectedTab] = useState(0);
 

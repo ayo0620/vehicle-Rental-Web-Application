@@ -1,6 +1,35 @@
 const express = require('express')
 const router = express.Router()
+const jwt = require('jsonwebtoken');
 const Vehicle = require('../models/vehicle')
+
+
+const authenticateUser = (req, res, next) => {
+    const token = req.headers.authorization;
+    if (!token) {
+      return res.status(401).json({ message: 'Authorization token missing' });
+    }
+  
+    jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
+      if (err) {
+        return res.status(401).json({ message: 'Invalid token' });
+      }
+  
+      // Add the decoded token to the request for further use
+      req.decodedToken = decodedToken;
+      next();
+    });
+  };
+
+// Use the middleware for routes that require authentication
+router.get('/', authenticateUser, async (req, res) => {
+    try {
+      const vehicles = await Vehicle.find();
+      res.json(vehicles);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+});
 
 
 // Getting all Vehciles
