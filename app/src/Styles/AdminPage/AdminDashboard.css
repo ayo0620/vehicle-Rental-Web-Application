@@ -1,0 +1,26 @@
+.AdminDashboard-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Adjust the height as needed */
+    background-color: antiquewhite;
+}
+  
+.MainContainer {
+    display: flex;
+    flex: 1;
+}
+
+.MainDashboard {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto; /* Add scroll if content overflows */
+}
+
+.default-dashboard { 
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    height: 70vh;
+    font-size: xx-large;
+
+}

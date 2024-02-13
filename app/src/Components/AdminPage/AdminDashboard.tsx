@@ -1,21 +1,58 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import AdminSidebar from "./AdminSidebar";
+import AdminAppBar from "./AdminAppBar";
+import VehicleDashboard from "./VehicleDashboard";
+import BookingsDashboard from "./BookingsDashboard";
+import CustomersDashboard from "./CustomersDashboard";
+import AnalyticsDashboard from "./AnalyticsDashboard";
+import CustomerReviewDashboard from "./CustomerReviewDashboard";
+import '../../Styles/AdminPage/AdminDashboard.css';
 
-const AdminDashboard = () => {
-  const navigate = useNavigate();
 
-  const handleLogout = () => {
-    // Clear the authentication token from local storage
-    localStorage.removeItem("token");
+interface AdminAppBarProps {
+  adminName: string;
+  adminProfilePicture: string;
+}
 
-    // Redirect to the login page
-    navigate("/");
+const AdminDashboard: React.FC = () => {
+  const adminName = 'Admin Name';
+  const adminProfilePicture = 'https://example.com/profile-picture.jpg';
+
+  // State to manage the selected section of the dashboard
+  const [selectedSection, setSelectedSection] = useState<string>('dashboard');
+
+  // Function to handle section selection
+  const handleSectionSelect = (section: string) => {
+    setSelectedSection(section);
   };
 
+  const renderDashboardContent = (): React.ReactNode => {
+    switch (selectedSection) {
+      case 'vehicles':
+        return <VehicleDashboard />;
+      case 'bookings':
+        return <BookingsDashboard />;
+      case 'customers':
+        return <CustomersDashboard/>;
+      case 'analytics':
+        return <AnalyticsDashboard/>
+      case 'customer-review':
+        return <CustomerReviewDashboard/>
+      default:
+        return <div className="default-dashboard">Main Dashboard</div>;
+    }
+  };
+
+
   return (
-    <div>
-      <h1>Admin Dashboard</h1>
-      <button onClick={handleLogout}>Logout</button>
+    <div className="AdminDashboard-container">
+      <AdminAppBar adminName={adminName} adminProfilePicture={adminProfilePicture}/>
+      <div className="MainContainer">
+        <AdminSidebar onSectionSelect={handleSectionSelect}/>
+        <div className="MainDashboard">
+          {renderDashboardContent()}
+        </div>
+      </div>
     </div>
   );
 };

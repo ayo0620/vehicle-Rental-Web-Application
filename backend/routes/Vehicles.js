@@ -6,20 +6,25 @@ const Vehicle = require('../models/vehicle')
 
 const authenticateUser = (req, res, next) => {
     const token = req.headers.authorization;
-    if (!token) {
-      return res.status(401).json({ message: 'Authorization token missing' });
+    const tokenWithoutBearer = token.split(' ')[1];
+    console.log('Received token:', tokenWithoutBearer);
+    if (!tokenWithoutBearer) {
+        return res.status(401).json({ message: 'Authorization token missing' });
     }
-  
-    jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
-      if (err) {
-        return res.status(401).json({ message: 'Invalid token' });
-      }
-  
-      // Add the decoded token to the request for further use
-      req.decodedToken = decodedToken;
-      next();
+
+    jwt.verify(tokenWithoutBearer, process.env.JWT_SECRET, (err, decodedToken) => {
+        if (err) {
+            // console.error('Error verifying token:', err);
+            return res.status(401).json({ message: 'Invalid token' });
+        }
+        
+        console.log('Decoded token:', decodedToken);
+        // Add the decoded token to the request for further use
+        req.decodedToken = decodedToken;
+        next();
     });
-  };
+};
+
 
 // Use the middleware for routes that require authentication
 router.get('/', authenticateUser, async (req, res) => {
@@ -32,18 +37,8 @@ router.get('/', authenticateUser, async (req, res) => {
 });
 
 
-// Getting all Vehciles
-router.get('/', async (req, res) => {
-    try {
-        const vehicles = await Vehicle.find()
-        res.json(vehicles)
-    } catch (err) {
-        res.status(500).json({message: err.message})
-    }
-})
-
 // Creating
-router.post('/', async (req, res) => {
+router.post('/', authenticateUser, async (req, res) => {
     const vehicle = new Vehicle({
         vehicleType: req.body.vehicleType,
         make: req.body.make,
@@ -66,7 +61,7 @@ router.post('/', async (req, res) => {
 
 
 // Filtering
-router.get('/filter', async (req, res) => {
+router.get('/filter', authenticateUser, async (req, res) => {
     try {
         // Extract filter parameters from the query string
         const { vehicleTypes, brands, priceRange } = req.query;
@@ -101,7 +96,7 @@ router.get('/filter', async (req, res) => {
   });
 
   // Updating 
-router.patch('/:id', getVehicle, async (req, res) => {
+router.patch('/:id', authenticateUser, getVehicle, async (req, res) => {
     if(req.body.vehicleType != null) {
         res.vehicle.vehicleType = req.body.vehicleType
     }
@@ -141,13 +136,13 @@ router.patch('/:id', getVehicle, async (req, res) => {
 })
 
 // Getting by id
-router.get('/:id', getVehicle, (req, res) => {
+router.get('/:id', authenticateUser, getVehicle, (req, res) => {
     res.json(res.vehicle);
   });
 
 
 // Deleting
-router.delete('/:id', getVehicle, async (req, res) => {
+router.delete('/:id', authenticateUser, getVehicle, async (req, res) => {
     try {
         await res.vehicle.deleteOne();
         res.json({ message: 'Deleted Vehicle'})
