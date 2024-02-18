@@ -7,6 +7,13 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
+// import routes
+const adminDashboardRouter = require('./routes/AdminDashboard');
+const vehiclesRouter = require('./routes/Vehicles');
+const usersRouter = require('./routes/Users');
+const bookingsRouter = require('./routes/Bookings')
+
+
 
 mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true});
 const db = mongoose.connection;
@@ -16,10 +23,10 @@ db.once('open', () => console.log('Connected to Database'));
 app.use(cors({origin: 'http://localhost:3000'}));
 app.use(express.json());
 
-const vehiclesRouter = require('./routes/Vehicles')
-const usersRouter = require('./routes/Users')
+app.use('/admin-dashboard', adminDashboardRouter);
 app.use('/vehicles', vehiclesRouter);
 app.use('/users', usersRouter);
+app.use('/bookings', bookingsRouter);
 
 app.post('/create-payment-intent', async (req, res) => {
     try {

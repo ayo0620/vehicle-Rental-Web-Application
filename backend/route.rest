@@ -10,6 +10,7 @@ GET http://localhost:5001/vehicles/6526dbd23acee4d5f5b21c47
 ### To add vehicle
 POST http://localhost:5001/vehicles
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWQxOGJhOGU4OTU5M2IzZmM1YzJiZjEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDgyMzMzOTEsImV4cCI6MTcwODIzNjk5MX0.kwqsvTqqUmrhWGONAMUytZjfcUGWDwg7wRpAqUbgR34
 
 {
    "vehicleType": "boat",
@@ -23,7 +24,8 @@ Content-Type: application/json
     "availability": true,
     "rentPerHour": 89.99,
     "description": "",
-    "reviews": []
+    "reviews": [],
+    "createdBy":"6526d3ad0a58f8e3e32e0fd8"
 }
 
 

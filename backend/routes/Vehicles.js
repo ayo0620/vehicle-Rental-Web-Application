@@ -28,8 +28,11 @@ const authenticateUser = (req, res, next) => {
 
 // Use the middleware for routes that require authentication
 router.get('/', authenticateUser, async (req, res) => {
+
+    const adminId = req.decodedToken.userId;
+
     try {
-      const vehicles = await Vehicle.find();
+      const vehicles = await Vehicle.find({ createdBy: adminId });
       res.json(vehicles);
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -39,6 +42,9 @@ router.get('/', authenticateUser, async (req, res) => {
 
 // Creating
 router.post('/', authenticateUser, async (req, res) => {
+
+    const adminId = req.decodedToken.userId;
+
     const vehicle = new Vehicle({
         vehicleType: req.body.vehicleType,
         make: req.body.make,
@@ -49,7 +55,8 @@ router.post('/', authenticateUser, async (req, res) => {
         fuelType: req.body.fuelType,
         bookedTimeSlots: req.body.bookedTimeSlots,
         availability: req.body.availability,
-        rentPerHour: req.body.rentPerHour
+        rentPerHour: req.body.rentPerHour,
+        createdBy: adminId
     })
     try {
         const newVehicle = await vehicle.save()

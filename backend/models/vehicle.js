@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const vehicleSchema = new mongoose.Schema({
     vehicleType: {
@@ -32,42 +32,43 @@ const vehicleSchema = new mongoose.Schema({
     bookedTimeSlots: [
         {
             from: {
-                    type: String,
-                    required: true
-                  },
+                type: String,
+                required: true
+            },
             to: {
-                    type: String,
-                    required: true
-                }
+                type: String,
+                required: true
+            }
         }
-    ] ,
-
+    ],
     availability: {
         type: Boolean,
         required: true
     },
-
     rentPerHour: {
         type: Number,
         required: true
     },
-
     description: {
         type: String,
     },
     reviews: [
         { 
             user: {
-                    type: String,
-                    required: true,
-                  },
+                type: String,
+                required: true,
+            },
             comment: {
-                        type: String,
-                        required: true,
-                    },
+                type: String,
+                required: true,
+            },
         }
-    ]
-})
+    ],
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Admin',
+        required: true
+    }
+});
 
-module.exports = mongoose.model('vehicle', vehicleSchema)
-
+module.exports = mongoose.model('vehicle', vehicleSchema);

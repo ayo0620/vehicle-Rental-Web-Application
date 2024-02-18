@@ -34,6 +34,8 @@ const LoginPageDashboard: React.FC<LoginPageProps> = ({ onLogin }) => {
         // Login successful
         onLogin(email, password);
         localStorage.setItem('token', data.token); // Save the token to local storage
+        const token = data.token;
+        console.log('Admin Token:', token);
         const userRole = data.role;
 
         if (userRole == 'admin') {

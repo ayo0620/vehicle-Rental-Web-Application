@@ -1,0 +1,11 @@
+POST http://localhost:5001/bookings
+Content-Type: application/json
+
+{
+    "vehicleId": "6526dbe23acee4d5f5b21c49", 
+    "userId": "65d18ba8e89593b3fc5c2bf1",  
+    "totalAmount": "100",      
+    "status": "Pending",       
+    "dataOrdered": "2023-11-01T12:00:00Z",
+    "createdBy": "65d1a83ef86d42a3d45d4ec7"                
+}
