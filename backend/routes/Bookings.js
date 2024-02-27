@@ -38,14 +38,15 @@ router.get('/', authenticateAdmin, async (req, res) => {
 
 // Create a new booking
 router.post('/', async (req, res) => {
+    const adminId = req.decodedToken.userId;
 
     const booking = new Booking({
         vehicleId: req.body.vehicleId,
         userId: req.body.userId,
         totalAmount: req.body.totalAmount,
         status: req.body.status,
-        dataOrdered: req.body.dataOrdered,
-        createdBy: req.body.createdBy
+        dateOrdered: req.body.dateOrdered,
+        createdBy: adminId,
     });
 
     try {

@@ -68,6 +68,10 @@ const vehicleSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Admin',
         required: true
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now // Automatically set the current date and time when a new vehicle is created
     }
 });
 

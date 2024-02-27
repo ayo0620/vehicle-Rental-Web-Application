@@ -7,6 +7,7 @@ import CustomersDashboard from "./CustomersDashboard";
 import AnalyticsDashboard from "./AnalyticsDashboard";
 import CustomerReviewDashboard from "./CustomerReviewDashboard";
 import '../../Styles/AdminPage/AdminDashboard.css';
+import MainDashboard from "./MainDashboard";
 
 
 interface AdminAppBarProps {
@@ -39,7 +40,7 @@ const AdminDashboard: React.FC = () => {
       case 'customer-review':
         return <CustomerReviewDashboard/>
       default:
-        return <div className="default-dashboard">Main Dashboard</div>;
+        return <MainDashboard/>;
     }
   };
 

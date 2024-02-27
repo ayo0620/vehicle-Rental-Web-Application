@@ -1,11 +1,16 @@
-POST http://localhost:5001/bookings
+GET http://localhost:5001/admin-dashboard/total-listings
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWQxOGJhOGU4OTU5M2IzZmM1YzJiZjEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDkwMDEyMzAsImV4cCI6MTcwOTAwNDgzMH0.3yRv3kcIXk3Bf1XFfPPlRI_64zugUXrKMHRF6bhCOCs
 
-{
-    "vehicleId": "6526dbe23acee4d5f5b21c49", 
-    "userId": "65d18ba8e89593b3fc5c2bf1",  
-    "totalAmount": "100",      
-    "status": "Pending",       
-    "dataOrdered": "2023-11-01T12:00:00Z",
-    "createdBy": "65d1a83ef86d42a3d45d4ec7"                
-}
+# POST http://localhost:5001/bookings
+# Content-Type: application/json
+
+# {
+#     "vehicleId": "6526dc233acee4d5f5b21c4d", 
+#     "userId": "65d18b8ce89593b3fc5c2bed",  
+#     "totalAmount": "300",      
+#     "status": "Pending",  
+#     "createdBy": "65d18ba8e89593b3fc5c2bf1"                       
+# }
+
+

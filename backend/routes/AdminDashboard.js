@@ -2,7 +2,10 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const Vehicle = require('../models/vehicle');
+const mongoose = require('mongoose');
+const moment = require('moment');
 const Booking = require('../models/booking');
+
 
 // Middleware to authenticate admin
 const authenticateAdmin = (req, res, next) => {
@@ -29,42 +32,100 @@ const authenticateAdmin = (req, res, next) => {
 
 // Total Listings for the Admin
 router.get('/total-listings', authenticateAdmin, async (req, res) => {
-    const adminId = req.decodedToken.userId; // Assuming userId is used to identify admins
-    try {
-        const totalListings = await Vehicle.find({ createdBy: adminId});
-        totalAdminListings = totalListings.length;
-        res.json({ totalAdminListings });
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
+  const adminId = req.decodedToken.userId;
+
+  try {
+      let dateSevenDaysAgo = new Date();
+      dateSevenDaysAgo.setDate(dateSevenDaysAgo.getDate() - 7);
+      console.log('Date seven days ago:', dateSevenDaysAgo);
+
+      const listingsData = await Vehicle.aggregate([
+          {
+              $match: {
+                  createdBy: new mongoose.Types.ObjectId(adminId),
+                  createdAt: { $gte: dateSevenDaysAgo }
+              }
+          },
+          {
+              $group: {
+                  _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                  count: { $sum: 1 }
+              }
+          },
+          {
+              $sort: { "_id": 1 }
+          }
+      ]);
+
+      res.json(listingsData);
+  } catch (err) {
+      console.error('Error fetching total listings:', err);
+      res.status(500).json({ message: 'Error fetching total listings', error: err.message });
+  }
 });
 
 // Total Revenue for the Admin
 router.get('/total-revenue', authenticateAdmin, async (req, res) => {
-    const adminId = req.decodedToken.userId; // Retrieve adminId from decoded token
+  const adminId = req.decodedToken.userId;
 
-    try {
-        const bookings = await Booking.find({ createdBy: adminId });
-        let totalRevenue = 0;
-        bookings.forEach(booking => {
-            totalRevenue += booking.totalAmount;
-        });
-        res.json({ totalRevenue });
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
+  try {
+      let dateSevenDaysAgo = new Date();
+      dateSevenDaysAgo.setDate(dateSevenDaysAgo.getDate() - 7);
+
+      const revenueData = await Booking.aggregate([
+          {
+              $match: {
+                  createdBy: new mongoose.Types.ObjectId(adminId),
+                  dateOrdered: { $gte: dateSevenDaysAgo }
+              }
+          },
+          {
+              $group: {
+                  _id: { $dateToString: { format: "%Y-%m-%d", date: "$dateOrdered" } },
+                  total: { $sum: '$totalAmount' }
+              }
+          },
+          {
+              $sort: { "_id": 1 }
+          }
+      ]);
+
+      res.json(revenueData);
+  } catch (err) {
+      res.status(500).json({ message: 'Error fetching total revenue', error: err });
+  }
 });
 
 // Total Bookings for the Admin
 router.get('/total-bookings', authenticateAdmin, async (req, res) => {
-    const adminId = req.decodedToken.userId; // Retrieve adminId from decoded token
+  const adminId = req.decodedToken.userId;
 
-    try {
-        const totalBookings = await Booking.countDocuments({ createdBy: adminId });
-        res.json({ totalBookings });
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
+  try {
+      let dateSevenDaysAgo = new Date();
+      dateSevenDaysAgo.setDate(dateSevenDaysAgo.getDate() - 7);
+
+      const bookingsData = await Booking.aggregate([
+          {
+              $match: {
+                  createdBy: new mongoose.Types.ObjectId(adminId),
+                  dateOrdered: { $gte: dateSevenDaysAgo }
+              }
+          },
+          {
+              $group: {
+                  _id: { $dateToString: { format: "%Y-%m-%d", date: "$dateOrdered" } },
+                  count: { $sum: 1 }
+              }
+          },
+          {
+              $sort: { "_id": 1 }
+          }
+      ]);
+
+      res.json(bookingsData);
+  } catch (err) {
+      res.status(500).json({ message: 'Error fetching total bookings', error: err });
+  }
 });
 
 // Recent Orders for the Admin
@@ -78,6 +139,10 @@ router.get('/recent-orders', authenticateAdmin, async (req, res) => {
     }
 });
 
+
+
 module.exports = router;
+
+
 
 
