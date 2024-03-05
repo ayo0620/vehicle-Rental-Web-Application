@@ -1,6 +1,6 @@
-GET http://localhost:5001/admin-dashboard/total-listings
+GET http://localhost:5001/admin-dashboard/listings
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWQxOGJhOGU4OTU5M2IzZmM1YzJiZjEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDkwMDEyMzAsImV4cCI6MTcwOTAwNDgzMH0.3yRv3kcIXk3Bf1XFfPPlRI_64zugUXrKMHRF6bhCOCs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWQxOGJhOGU4OTU5M2IzZmM1YzJiZjEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDk0MTQ3NDMsImV4cCI6MTcwOTQxODM0M30.wpBc5d11Q1tWKMmTQf5hlQOobTbSg4wAZWVcAlbYgF8
 
 # POST http://localhost:5001/bookings
 # Content-Type: application/json

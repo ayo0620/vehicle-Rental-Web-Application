@@ -139,6 +139,18 @@ router.get('/recent-orders', authenticateAdmin, async (req, res) => {
     }
 });
 
+// Endpoint to get all vehicle listings related to a particular admin
+router.get('/listings', authenticateAdmin, async (req, res) => {
+  const adminId = req.decodedToken.userId;
+
+  try {
+      const listings = await Vehicle.find({ createdBy: adminId });
+      res.json(listings);
+  } catch (err) {
+      console.error('Error fetching listings:', err);
+      res.status(500).json({ message: 'Error fetching listings', error: err.message });
+  }
+});
 
 
 module.exports = router;

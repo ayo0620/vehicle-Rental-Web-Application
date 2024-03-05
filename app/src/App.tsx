@@ -9,6 +9,8 @@ import LoginPageDashboard from './Components/LoginPage/LoginPageDashboard';
 import SignupPageDashboard from './Components/LoginPage/SignUpPageDashboard';
 import AdminSignupPage from './Components/LoginPage/AdminSignupPage';
 import AdminDashboard from './Components/AdminPage/AdminDashboard';
+import AddListingsForm from './Components/AdminPage/AddListingsForm/AddListingsForm';
+import VehicleListingDetails from './Components/AdminPage/VehicleListingDetails/VehicleListingDetails';
 
 function App() {
 
@@ -25,6 +27,9 @@ function App() {
         <Route path='/vehicleListings/vehicle/checkout/:id' Component={CheckoutDashboard}/>
         <Route path='/confirmationPage' Component={PaymentConfirmationPage}/>
         <Route path='/adminDashboard' Component={AdminDashboard}/>
+        <Route path="/add-listings" element={<AddListingsForm/>} />
+        <Route path="/add-listings/:id" element={<AddListingsForm/>} />
+        <Route path="/vehicle-listing-details/:id" element={<VehicleListingDetails/>} />
       </Routes>
       </BrowserRouter>
     </div>

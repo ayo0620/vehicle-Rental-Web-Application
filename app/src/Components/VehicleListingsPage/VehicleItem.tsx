@@ -13,7 +13,7 @@ const VehicleItem: React.FC<vehicleItemProps> = ({ vehicle }) => {
      return (
           <div className="listing-item"> 
                <Link to={`vehicle/${vehicle._id}`}>
-                    <img src={vehicle.image} width={300} height={300}/>
+                    <img src={`http://localhost:3000/uploads/${vehicle.image}`} width={300} height={300}/>
                </Link>
                <div className="vehicle-details">
                     <div className="title">

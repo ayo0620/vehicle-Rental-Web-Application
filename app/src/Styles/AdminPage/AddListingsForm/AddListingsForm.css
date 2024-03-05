@@ -1,0 +1,160 @@
+.add-vehicle-container {
+    /* max-width: 800px; */
+    margin: auto;
+    background-color: #FFF8E7;;
+    border-radius: 8px;
+    height: auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.add-vehicle-container .header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: #F7F0E8;
+    margin-bottom: 2rem;
+    margin-left: 2px;
+    padding-left: 20px;
+    border-bottom: 1px solid #E0E0E0;
+}
+
+.add-vehicle-container .header h2 {
+    flex-grow: 1;
+    margin-left: 25px;
+    font-size: 24px;
+    color: #495057;
+    text-align: center;
+}
+
+
+.back-button {
+    background: none;
+    border: none;
+    color: #555;
+    cursor: pointer;
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.form-container {
+    display: flex;
+    margin-top: 120px;
+    justify-content: space-between;
+    width: auto;
+    margin-right: 40px;
+    height: 70vh;
+    background-color: #FFF8E7;;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.image-upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.image-preview {
+    width: 200px;
+    height: 200px;
+    margin: auto;
+    background-color: white;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.image-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 50%;
+}
+
+.upload-button {
+    padding: 8px 15px;
+    background-color: #007bff;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    margin-top: 10px;
+    border-radius: 4px;
+    transition: background-color 0.15s ease-in-out; 
+}
+
+.upload-button:hover {
+    background-color: #0056b3;
+}
+
+.vehicle-form {
+    flex-grow: 1;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-left: 20px;
+}
+
+.vehicle-form input[type="text"],
+.vehicle-form select,
+.vehicle-form textarea {
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+}
+
+.vehicle-form textarea {
+    grid-column: 1 / -1; /* Makes textarea span full width */
+    resize: vertical;
+    min-height: 150px;
+}
+
+.vehicle-form .submit-button {
+    padding: 10px 10px;
+    grid-column: 1 / -1; 
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    width: 200px;
+    justify-self: right;
+    margin-top: 15px;
+    font-weight: bolder;
+    transition: background-color 0.15s ease-in-out;
+
+}
+
+.vehicle-form .submit-button:hover {
+    background-color: #218838; 
+}
+
+/* input, textarea, button {
+    margin: 0;
+    padding: 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+} */
+
+@media (max-width: 768px) {
+    .add-vehicle-container {
+        padding: 1rem; /* Less padding on smaller screens */
+    }
+
+    .form-container {
+        margin-top: 1rem;
+    }
+
+    .vehicle-form {
+        grid-template-columns: 1fr; /* Stack inputs in one column on small screens */
+    }
+
+    .vehicle-form textarea,
+    .vehicle-form .submit-button {
+        grid-column: span 1; /* Ensure they span full width on small screens */
+    }
+}

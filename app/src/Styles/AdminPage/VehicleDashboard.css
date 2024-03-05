@@ -1,7 +1,108 @@
-.vehicle-dashboard-container {
+.Admin-Listings-Container {
     display: flex;
-    justify-content: center;
-    align-items: center; 
-    height: 70vh;
-    font-size: xx-large;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    margin-left: 10px;
+    height: 100vh;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.header h3 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+}
+
+.add-button button {
+    padding: 10px 10px;
+    font-size: 15px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.add-button button:hover {
+    background-color: #0056b3;
+}
+  
+.Admin-Listings-Container a {
+    text-decoration: none;
+    color: #007bff;
+    margin-bottom: 20px;
+    margin-right: 20px;
+}
+
+.Admin-Listings-Container .add-button {
+    align-self: flex-end;
+}
+
+.MuiDataGrid-root {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+    box-shadow: '0px 13px 20px 0px #80808029';
+    font-family: Arial, sans-serif;
+    background-color: #F5F5F5;
+    height: 60vh !important;
+    border-radius: 5px;
+}
+
+.MuiDataGrid-headerContainer {
+    background-color: #f2f2f2;
+    padding: 8px;
+}
+
+.MuiDataGrid-columnHeader {
+    color: #333;
+    font-size: 18px;
+    font-weight: bolder;
+    text-align: center;
+}
+
+.MuiDataGrid-row {
+    border-bottom: 1px solid #ddd;
+    padding: 8px;
+}
+
+.MuiDataGrid-cell {
+    text-align: center;
+}
+
+.MuiDataGrid-actions {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.MuiDataGrid-actions button {
+    border: none;
+    padding: 4px 8px;
+    background-color: #f2f2f2;
+    cursor: pointer;
+}
+
+.MuiDataGrid-actions button:hover {
+    background-color: #ddd;
+}
+  
+.action-buttons button {
+    padding: 2px 5px;
+    font-size: 10px;
+    border-radius: 5px;
+}
+
+.delete-selected-button {
+    margin-bottom: 10px;
 }

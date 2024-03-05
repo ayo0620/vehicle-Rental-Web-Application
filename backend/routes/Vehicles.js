@@ -1,7 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const jwt = require('jsonwebtoken');
-const Vehicle = require('../models/vehicle')
+const Vehicle = require('../models/vehicle');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 
 
 const authenticateUser = (req, res, next) => {
@@ -41,8 +43,9 @@ router.get('/', authenticateUser, async (req, res) => {
 
 
 // Creating
-router.post('/', authenticateUser, async (req, res) => {
-
+router.post('/', authenticateUser, upload.single('image'), async (req, res) => {
+    console.log(req.file);
+    const imagePath = req.file ? req.file.path : ''; // or the URL if you're using cloud storage
     const adminId = req.decodedToken.userId;
 
     const vehicle = new Vehicle({
@@ -50,11 +53,11 @@ router.post('/', authenticateUser, async (req, res) => {
         make: req.body.make,
         model: req.body.model,
         year: req.body.year,
-        image: req.body.image,
+        image: imagePath,
         capacity: req.body.capacity,
         fuelType: req.body.fuelType,
         bookedTimeSlots: req.body.bookedTimeSlots,
-        availability: req.body.availability,
+        availability: true,
         rentPerHour: req.body.rentPerHour,
         createdBy: adminId
     })
@@ -157,6 +160,18 @@ router.delete('/:id', authenticateUser, getVehicle, async (req, res) => {
         res.status(500).json({ message: err.message})
     }
 })
+
+router.post('/deleteMany', authenticateUser, async (req, res) => {
+    const vehicleIds = req.body.ids;
+    try {
+      await Vehicle.deleteMany({
+        _id: { $in: vehicleIds }
+      });
+      res.json({ message: `Deleted vehicles: ${vehicleIds.join(', ')}` });
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  });
 
 async function getVehicle(req, res, next) {
     let vehicle;

@@ -43,7 +43,7 @@ const vehicleSchema = new mongoose.Schema({
     ],
     availability: {
         type: Boolean,
-        required: true
+        default: true
     },
     rentPerHour: {
         type: Number,
@@ -71,7 +71,7 @@ const vehicleSchema = new mongoose.Schema({
     },
     createdAt: {
         type: Date,
-        default: Date.now // Automatically set the current date and time when a new vehicle is created
+        default: Date.now
     }
 });
 
