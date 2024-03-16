@@ -18,7 +18,7 @@ const bookingSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['Pending', 'Confirmed', 'Cancelled'],
+        enum: ['Pending', 'Confirmed', 'Declined'],
         default: 'Pending',
         required: true
     },
@@ -28,7 +28,7 @@ const bookingSchema = new mongoose.Schema({
         default: Date.now,
         required: true
     },
-    
+
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Admin',

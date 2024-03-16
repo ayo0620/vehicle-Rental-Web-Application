@@ -2,6 +2,8 @@
 const express = require('express');
 const router = express.Router();
 const Booking = require('../models/booking');
+const Vehicle = require('../models/vehicle');
+const jwt = require('jsonwebtoken');
 
 // Middleware to authenticate admin
 const authenticateAdmin = (req, res, next) => {
@@ -71,19 +73,44 @@ router.get('/:id', authenticateAdmin, async (req, res) => {
 });
 
 // Update a booking
-router.patch('/:id', async (req, res) => {
-    try {
-        const booking = await Booking.findById(req.params.id);
-        if (!booking) {
-            return res.status(404).json({ message: 'Booking not found' });
-        }
-        // Update the booking status
-        booking.status = req.body.status;
-        const updatedBooking = await booking.save();
-        res.json(updatedBooking);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
-    }
+router.patch('/:id', authenticateAdmin, async (req, res) => {
+  try {
+      const { status } = req.body;
+      const { id } = req.params;
+
+      // Fetch the booking by ID
+      const booking = await Booking.findById(id);
+      if (!booking) {
+          return res.status(404).json({ message: 'Booking not found' });
+      }
+
+      // Update the booking status
+      booking.status = status;
+      await booking.save();
+
+      // If the booking is confirmed, update vehicle availability
+      if (status === 'Confirmed') {
+          const vehicle = await Vehicle.findById(booking.vehicleId);
+          if (vehicle) {
+              vehicle.availability = false;
+              await vehicle.save();
+          }
+      }
+
+      // If the booking is declined, update vehicle availability if necessary
+      if (status === 'Declined') {
+          const vehicle = await Vehicle.findById(booking.vehicleId);
+          if (vehicle) {
+              vehicle.availability = true;
+              await vehicle.save();
+          }
+      }
+
+      res.json(booking);
+  } catch (error) {
+      console.error('Error updating booking status:', error);
+      res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
 // Delete a booking

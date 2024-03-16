@@ -152,6 +152,19 @@ router.get('/listings', authenticateAdmin, async (req, res) => {
   }
 });
 
+router.get('/bookings', authenticateAdmin, async (req, res) => {
+  const adminId = req.decodedToken.userId;
+
+  try {
+      const bookings = await Booking.find({ createdBy: adminId });
+      res.json(bookings);
+  } catch (err) {
+      console.error('Error fetching bookings:', err);
+      res.status(500).json({ message: 'Error fetching bookings', error: err.message });
+  }
+});
+
+
 
 module.exports = router;
 

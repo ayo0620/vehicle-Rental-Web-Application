@@ -22,7 +22,13 @@ interface Vehicle {
     make: string;
     model: string;
     year: number;
-  }
+}
+
+const statusColors: Record<string, string> = {
+    Pending: '#FFC107', // Yellow
+    Confirmed: '#4CAF50', // Green
+    Declined: '#F44336', // Red
+};
 
 const RecentOrdersTable: React.FC = () => {
   const [recentOrders, setRecentOrders] = useState<Order[]>([]);
@@ -100,7 +106,9 @@ const RecentOrdersTable: React.FC = () => {
                 <TableCell align="left">{new Date(order.dateOrdered).toLocaleString()}</TableCell>
                 {/* <TableCell align="left">{order.user ? order.user.email : 'Unknown User'}</TableCell> */}
                 <TableCell align="left">{order.totalAmount}</TableCell>
-                <TableCell align="left">{order.status}</TableCell>
+                <TableCell align="left">
+                    <span style={{fontWeight:"bold",  color: statusColors[order.status] }}>{order.status}</span>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
