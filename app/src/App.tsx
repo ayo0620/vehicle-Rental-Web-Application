@@ -22,7 +22,7 @@ function App() {
         <Route path='/signup' element={<SignupPageDashboard onSignup={() => {}} />} />
         <Route path="/adminSignup" element={<AdminSignupPage onAdminSignup={() => {}} />} />
         <Route path='/LandingPage' Component={LandingPage}/>
-        <Route path='/vehicleListings' Component={VehicleListingsDashboard}/>
+        <Route path='/vehicleListings' element={<VehicleListingsDashboard/>}/>
         <Route path='/vehicleListings/vehicle/:id' Component={VehicleDetailsDashbaord}/>
         <Route path='/vehicleListings/vehicle/checkout/:id' Component={CheckoutDashboard}/>
         <Route path='/confirmationPage' Component={PaymentConfirmationPage}/>

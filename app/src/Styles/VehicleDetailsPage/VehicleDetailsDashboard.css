@@ -1,31 +1,40 @@
 .vehicle-details-container {
     display: flex;
-    margin: 25px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: flex-start;
+    margin: 20px 0;
+}
+
+.vehicle-info {
+    flex: 1; 
+    max-width: 60%;
+    min-width: 300px; 
 }
 
 .pick-up-return-section {
-    margin-left: 30px;
-    padding: 20px;
-    width: 400px;
-    background-color: white;
+    margin-top: 20px;
+    flex-basis: 350px; 
+    padding: 0px 18px;
+    background-color: whitesmoke;
+    align-self: flex-start;
+    box-sizing: border-box;
 }
 
 .vehicle-image {
+    margin-top:0px !important; 
     width: 100%;
     max-width: 100%;
-    max-height: 750px;
+    max-height: 650px;
     height: auto;
+    margin-bottom: 20px;
     background-color: white;
 }
 
 label, input {
     margin-bottom: 20px;
     margin-left: 10px;
-}
-
-.vehicle-info {
-    margin-right: 20px;
-    width: 1400px;
 }
 
 .specification-list p {
@@ -42,6 +51,8 @@ label, input {
 }
 
 .rent-rate {
+    position: relative;
+    font-weight: bold;
     background-color: #3F3DA1;
     margin-top: -35px;
     margin-left: -18px;
@@ -63,3 +74,4 @@ label, input {
 .checkout-btn {
     text-align: center;
 }
+

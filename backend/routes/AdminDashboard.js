@@ -164,6 +164,18 @@ router.get('/bookings', authenticateAdmin, async (req, res) => {
   }
 });
 
+router.get('/pending-bookings-count', authenticateAdmin, async (req, res) => {
+  const adminId = req.decodedToken.userId;
+
+  try {
+      const count = await Booking.countDocuments({ createdBy: adminId, status: 'Pending' });
+      res.json({ count });
+  } catch (err) {
+      console.error('Error fetching pending bookings count:', err);
+      res.status(500).json({ message: 'Error fetching pending bookings count', error: err.message });
+  }
+});
+
 
 
 module.exports = router;

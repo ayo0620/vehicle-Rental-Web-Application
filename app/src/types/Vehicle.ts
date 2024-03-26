@@ -13,6 +13,7 @@ export interface Vehicle {
     }[];
     availability: boolean;
     rentPerHour: number;
+    createdBy: string;
     description?: string;
     reviews?: Review[];
   }

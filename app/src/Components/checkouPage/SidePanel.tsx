@@ -30,7 +30,7 @@ const SidePanel: React.FC<CheckoutSidePanelProps> = ({vehicleImage, vehicleName,
     return(
         <div className="sidepanel-container">
             <div className="sidepanel-image">
-                <img src={vehicleImage} width={300} height={150}/>
+                <img src={`http://localhost:3000/${vehicleImage}`} width={250} height={150}/>
             </div>
             <h3>{vehicleName}</h3>
             <p style={{marginBottom: '15px'}}>

@@ -105,7 +105,7 @@ const RecentOrdersTable: React.FC = () => {
                 <TableCell align="left">{order._id}</TableCell>
                 <TableCell align="left">{new Date(order.dateOrdered).toLocaleString()}</TableCell>
                 {/* <TableCell align="left">{order.user ? order.user.email : 'Unknown User'}</TableCell> */}
-                <TableCell align="left">{order.totalAmount}</TableCell>
+                <TableCell align="left">${order.totalAmount.toFixed(2)}</TableCell>
                 <TableCell align="left">
                     <span style={{fontWeight:"bold",  color: statusColors[order.status] }}>{order.status}</span>
                 </TableCell>

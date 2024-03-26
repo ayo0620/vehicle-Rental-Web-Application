@@ -18,7 +18,7 @@ interface LocationState {
 const CheckoutDashboard: React.FC = () => {
     const location = useLocation();
     const { state } = location || {};
-    const { vehicleImage, vehicleName, pickUpDate, returnDate, numberOfDays, rentPerDay } = state || {};
+    const { vehicleId, userId, adminId, vehicleImage, vehicleName, pickUpDate, returnDate, numberOfDays, rentPerDay } = state || {};
     const [selectedProtectionPlan, setSelectedProtectionPlan] = useState<string>("");
     const [totalAmountWithTax, setTotalAmountWithTax] = useState<number>(0); // New state for total amount
 
@@ -36,7 +36,10 @@ const CheckoutDashboard: React.FC = () => {
   return (
     <>
     <div className='checkout-page-containter'>
-      <Checkout 
+      <Checkout
+        vehicleId={vehicleId}
+        userId={userId} 
+        adminId={adminId}
         onProtectionPlanChange={handleProtectionPlanChange}
         totalAmountWithTax={totalAmountWithTax}
       />

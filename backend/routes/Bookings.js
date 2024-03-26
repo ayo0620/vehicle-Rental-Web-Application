@@ -40,7 +40,6 @@ router.get('/', authenticateAdmin, async (req, res) => {
 
 // Create a new booking
 router.post('/', async (req, res) => {
-    const adminId = req.decodedToken.userId;
 
     const booking = new Booking({
         vehicleId: req.body.vehicleId,
@@ -48,7 +47,7 @@ router.post('/', async (req, res) => {
         totalAmount: req.body.totalAmount,
         status: req.body.status,
         dateOrdered: req.body.dateOrdered,
-        createdBy: adminId,
+        createdBy: req.body.createdBy,
     });
 
     try {

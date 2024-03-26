@@ -12,10 +12,13 @@ import '../../Styles/CheckoutPage/PaymentForm.css'; // Add your CSS file for sty
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 
 interface PaymentFormProps {
+  vehicleId: string;
+  userId: string;
+  adminId: string;
   totalAmountWithTax: number;
 }
 
-const PaymentForm: React.FC<PaymentFormProps> = ({totalAmountWithTax}) => {
+const PaymentForm: React.FC<PaymentFormProps> = ({vehicleId, userId, adminId, totalAmountWithTax}) => {
   const stripe = useStripe();
   const elements  = useElements();
   const [nameOnCard, setNameOnCard] = useState<string>('');
@@ -23,14 +26,20 @@ const PaymentForm: React.FC<PaymentFormProps> = ({totalAmountWithTax}) => {
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
-
   const handlePayNow = async () => {
     setLoading(true);
 
     if (!stripe || !elements) {
+      setLoading(false);
       return;
     }
     
+    const cardElement = elements.getElement(CardElement);
+    if (!cardElement) {
+      setLoading(false);
+      return;
+    }
+
     // Reset previous errors
     setNameError(null);
 
@@ -44,7 +53,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({totalAmountWithTax}) => {
     const amountInCents = Math.round(totalAmountWithTax * 100);
 
     
-      const response = await fetch('http://localhost:5001/create-payment-intent', {
+      const paymentResponse = await fetch('http://localhost:5001/create-payment-intent', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -55,26 +64,47 @@ const PaymentForm: React.FC<PaymentFormProps> = ({totalAmountWithTax}) => {
         }),
       });
 
-      const { clientSecret } = await response.json();
-
-      // Confirm the payment on the client side
-      const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: elements.getElement(CardElement)!,
-          billing_details: {
-            name: nameOnCard,
+      const { clientSecret } = await paymentResponse.json();
+        const paymentResult = await stripe.confirmCardPayment(clientSecret, {
+          payment_method: {
+            card: cardElement,
+            billing_details: {
+              name: nameOnCard,
+            },
           },
-        },
-      });
+        });
 
-      if (error) {
-        console.error(error.message);
-        alert("Payment failed. Please check your card details and try again.");
-      } else {
-        console.log(paymentIntent);
-        // setNameOnCard("")
-        navigate("/confirmationPage")
-      }
+        if (paymentResult.error) {
+          alert("Payment failed: " + paymentResult.error.message);
+        } else {
+          if (paymentResult.paymentIntent.status === 'succeeded') {
+       
+            const bookingResponse = await fetch('http://localhost:5001/bookings', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+              },
+              body: JSON.stringify({
+                vehicleId: vehicleId,
+                userId: userId, 
+                totalAmount: totalAmountWithTax,
+                status: 'Pending', 
+                createdBy: adminId,
+              }),
+            });
+            
+            if (bookingResponse.ok) {
+              const bookingData = await bookingResponse.json();
+              console.log('Booking created', bookingData);
+              navigate("/confirmationPage");
+            } else {
+              const errorData = await bookingResponse.json();
+              console.error('Booking creation failed:', errorData.message);
+              alert(`Booking creation failed: ${errorData.message}`);
+            }
+          }
+        }
     } catch (error) {
         console.error(error instanceof Error ? error.message : 'An unknown error occurred.');
         alert("An error occurred. Please try again later.");

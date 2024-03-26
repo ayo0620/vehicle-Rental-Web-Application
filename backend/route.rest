@@ -1,10 +1,11 @@
 
 ### To Get All
 GET http://localhost:5001/vehicles
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWQxOGI4Y2U4OTU5M2IzZmM1YzJiZWQiLCJyb2xlIjoidXNlciIsImlhdCI6MTcxMTMwODg3NiwiZXhwIjoxNzExMzEyNDc2fQ.BoBU6r655WmPiVUDdN_vtS9a9VzaoJhxw10P78rbzkA
 
 ### To Get One
-GET http://localhost:5001/vehicles/6526dbd23acee4d5f5b21c47
+GET http://localhost:5001/vehicles/65e687262af9f2e025c89f7b
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWQxOGI4Y2U4OTU5M2IzZmM1YzJiZWQiLCJyb2xlIjoidXNlciIsImlhdCI6MTcxMTMxMjU2NSwiZXhwIjoxNzExMzE2MTY1fQ.arE0BvI336bxTx1SJ3hITvW7pfXDte4P3jdm1Nux268
 
 
 ### To add vehicle

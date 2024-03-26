@@ -8,24 +8,34 @@ const upload = multer({ dest: 'uploads/' });
 
 const authenticateUser = (req, res, next) => {
     const token = req.headers.authorization;
-    const tokenWithoutBearer = token.split(' ')[1];
-    console.log('Received token:', tokenWithoutBearer);
-    if (!tokenWithoutBearer) {
-        return res.status(401).json({ message: 'Authorization token missing' });
+
+    // Check if token is undefined
+    if (!token) {
+        return res.status(401).json({ message: 'Authorization header is missing' });
     }
+
+    const parts = token.split(' ');
+
+    // Check if the Authorization header is correctly formatted
+    if (parts.length !== 2 || parts[0] !== 'Bearer') {
+        return res.status(401).json({ message: 'Authorization header is malformed' });
+    }
+
+    const tokenWithoutBearer = parts[1];
+    console.log('Received token:', tokenWithoutBearer);
 
     jwt.verify(tokenWithoutBearer, process.env.JWT_SECRET, (err, decodedToken) => {
         if (err) {
-            // console.error('Error verifying token:', err);
+            console.error('Error verifying token:', err);
             return res.status(401).json({ message: 'Invalid token' });
         }
         
         console.log('Decoded token:', decodedToken);
-        // Add the decoded token to the request for further use
         req.decodedToken = decodedToken;
         next();
     });
 };
+
 
 
 // Use the middleware for routes that require authentication
@@ -34,7 +44,7 @@ router.get('/', authenticateUser, async (req, res) => {
     const adminId = req.decodedToken.userId;
 
     try {
-      const vehicles = await Vehicle.find({ createdBy: adminId });
+      const vehicles = await Vehicle.find({});
       res.json(vehicles);
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -59,6 +69,7 @@ router.post('/', authenticateUser, upload.single('image'), async (req, res) => {
         bookedTimeSlots: req.body.bookedTimeSlots,
         availability: true,
         rentPerHour: req.body.rentPerHour,
+        description: req.body.description,
         createdBy: adminId
     })
     try {
@@ -147,8 +158,11 @@ router.patch('/:id', authenticateUser, getVehicle, async (req, res) => {
 
 // Getting by id
 router.get('/:id', authenticateUser, getVehicle, (req, res) => {
-    res.json(res.vehicle);
-  });
+    if (!req.vehicle) {
+        return res.status(404).json({ message: 'Vehicle not found' });
+    }
+    res.json(req.vehicle);
+});
 
 
 // Deleting
@@ -174,20 +188,19 @@ router.post('/deleteMany', authenticateUser, async (req, res) => {
   });
 
 async function getVehicle(req, res, next) {
-    let vehicle;
-
     try {
-        vehicle = await Vehicle.findById(req.params.id)
-        if (vehicle == null) {
-            return res.status(404).json({ message: 'cannot find vehicle'})
+        const vehicle = await Vehicle.findById(req.params.id);
+        if (!vehicle) {
+            return res.status(404).json({ message: `Vehicle with ID ${req.params.id} not found` });
         }
-    } catch(err) {
-        return res.status(500).json({message: err.message})
+        req.vehicle = vehicle;
+        next();
+    } catch (err) {
+        console.error('Error in getVehicle:', err.message);
+        return res.status(500).json({ message: 'Internal server error' });
     }
-
-    res.vehicle = vehicle;
-    next();
 }
+
 
 
 module.exports = router

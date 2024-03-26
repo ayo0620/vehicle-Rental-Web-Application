@@ -99,4 +99,5 @@ const VehicleListingDetails: React.FC = () => {
   );
 }
 
+
 export default VehicleListingDetails;

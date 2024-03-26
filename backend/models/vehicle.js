@@ -51,6 +51,7 @@ const vehicleSchema = new mongoose.Schema({
     },
     description: {
         type: String,
+        required: true
     },
     reviews: [
         { 
@@ -66,7 +67,7 @@ const vehicleSchema = new mongoose.Schema({
     ],
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Admin',
+        ref: 'User',
         required: true
     },
     createdAt: {

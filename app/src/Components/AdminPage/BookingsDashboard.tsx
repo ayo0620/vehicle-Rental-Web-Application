@@ -58,9 +58,12 @@ const statusColors: Record<string, string> = {
     Confirmed: '#4CAF50', // Green
     Declined: '#F44336', // Red
 };
-  
 
-const StickyHeadTable: React.FC = () => {
+interface BookingsDashboardProps {
+    fetchPendingBookingsCount: () => void;
+}
+
+const StickyHeadTable: React.FC<BookingsDashboardProps> = ({ fetchPendingBookingsCount }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [bookings, setBookings] = React.useState<Booking[]>([]);
@@ -79,51 +82,35 @@ const StickyHeadTable: React.FC = () => {
     setSelectedBookingId('');
   };
 
-  const handleConfirm = async () => {
+  const updateBookingStatus = async (newStatus: string) => {
     try {
-      await fetch(`http://localhost:5001/bookings/${selectedBookingId}`, {
+      const response = await fetch(`http://localhost:5001/bookings/${selectedBookingId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-        body: JSON.stringify({ status: 'Confirmed' }),
+        body: JSON.stringify({ status: newStatus }),
       });
-      // Update the status of the confirmed booking in the local state
-      setBookings(prevBookings =>
-        prevBookings.map(booking =>
-          booking._id === selectedBookingId ? { ...booking, status: 'Confirmed' } : booking
-        )
-      );
+      if (response.ok) {
+        setBookings(prevBookings =>
+          prevBookings.map(booking =>
+            booking._id === selectedBookingId ? { ...booking, status: newStatus } : booking
+          )
+        );
+        fetchPendingBookingsCount(); // This will re-fetch the updated count
+      } else {
+        throw new Error('Failed to update booking status');
+      }
     } catch (error) {
-      console.error('Error confirming booking:', error);
+      console.error('Error updating booking status:', error);
     } finally {
       handleMenuClose();
     }
   };
 
-  const handleDecline = async () => {
-    try {
-      await fetch(`http://localhost:5001/bookings/${selectedBookingId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({ status: 'Declined' }),
-      });
-      // Update the status of the cancelled booking in the local state
-      setBookings(prevBookings =>
-        prevBookings.map(booking =>
-          booking._id === selectedBookingId ? { ...booking, status: 'Declined' } : booking
-        )
-      );
-    } catch (error) {
-      console.error('Error declining booking:', error);
-    } finally {
-      handleMenuClose();
-    }
-  };
+  const handleConfirm = () => updateBookingStatus('Confirmed');
+  const handleDecline = () => updateBookingStatus('Declined');
 
   React.useEffect(() => {
     // Fetch recent bookings
@@ -211,7 +198,7 @@ const StickyHeadTable: React.FC = () => {
                         <TableCell>{vehicleName}</TableCell>
                         <TableCell>{booking._id}</TableCell>
                         <TableCell>{booking.dateOrdered}</TableCell>
-                        <TableCell>${booking.totalAmount}</TableCell>
+                        <TableCell>${booking.totalAmount.toFixed(2)}</TableCell>
                         <TableCell>
                             <span style={{fontWeight:"bold",  color: statusColors[booking.status] }}>{booking.status}</span>
                         </TableCell>

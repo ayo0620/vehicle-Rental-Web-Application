@@ -1,4 +1,4 @@
-import React , { useState } from "react";
+import React , { useState, useEffect } from "react";
 import { FaCar, FaCarSide, FaChartLine, FaClipboardList, FaHome, FaRegClipboard, FaUsers } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -7,12 +7,12 @@ import '../../Styles/AdminPage/AdminSidebar.css';
 
 interface AdminSidebarProps {
     onSectionSelect: (section: string) => void;
+    pendingBookingsCount: number;
 }
 
-const AdminSidebar: React.FC<AdminSidebarProps> = ({ onSectionSelect }) => {
+const AdminSidebar: React.FC<AdminSidebarProps> = ({ onSectionSelect, pendingBookingsCount }) => {
     const navigate = useNavigate();
     const [selectedSection, setSelectedSection] = useState<string>('dashboard');
-
 
     const handleSectionClick = (section: string) => {
         setSelectedSection(section);
@@ -57,6 +57,9 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ onSectionSelect }) => {
                         <FaRegClipboard/>
                     </div>
                     <span>Bookings</span>
+                    {pendingBookingsCount > 0 && (
+                        <span className="notification-count">{pendingBookingsCount}</span>
+                    )}
                 </div>
 
                 <div className={`menuItem ${selectedSection === 'customers' ? 'active' : ''}`} onClick={() => handleSectionClick('customers')}>

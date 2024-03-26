@@ -18,11 +18,14 @@ import PaymentForm from "./PaymentForm";
 import '../../Styles/CheckoutPage/Checkout.css';
 
 interface CheckoutProps {
+    vehicleId: string;
+    userId: string;
+    adminId: string;
     onProtectionPlanChange: (plan: string) => void;
     totalAmountWithTax: number;
 }
 
-const Checkout: React.FC<CheckoutProps> = ({ onProtectionPlanChange, totalAmountWithTax }) => {
+const Checkout: React.FC<CheckoutProps> = ({ vehicleId, userId, adminId, onProtectionPlanChange, totalAmountWithTax }) => {
     const PUBLIC_KEY = "pk_test_51OBSk7GevQbRHFh3QRj00qKa6bU5HQ7DrbGLScBRywkZEAKzOY3Xs0SsVPxxh5RKFMUHfmjCxf75Z7hdRqLKtYFz00GcJPBU5W";
     const stripePromise = loadStripe(PUBLIC_KEY);
     const [protectionPlan, setProtectionPlan] = useState<string>('');
@@ -36,8 +39,6 @@ const Checkout: React.FC<CheckoutProps> = ({ onProtectionPlanChange, totalAmount
         }
     };
 
-  
-    // Payment method implementation goes here
   
     return ( 
       <div className="checkout-container">
@@ -83,7 +84,11 @@ const Checkout: React.FC<CheckoutProps> = ({ onProtectionPlanChange, totalAmount
 
         {/* Show Payment Form */}
             <Elements stripe={stripePromise}>
-                <PaymentForm totalAmountWithTax={totalAmountWithTax}/>
+                <PaymentForm
+                 vehicleId={vehicleId} 
+                 userId={userId}
+                 adminId={adminId}
+                 totalAmountWithTax={totalAmountWithTax}/>
             </Elements>
 
       </div>

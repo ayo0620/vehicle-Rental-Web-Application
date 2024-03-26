@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect} from 'react';
 import { AppBar, Toolbar, IconButton, Typography, Avatar } from '@mui/material';
 import { FaRegBell } from 'react-icons/fa';
+import '../../Styles/AdminPage/AdminAppBar.css';
+
 
 interface AdminAppBarProps {
     adminName: string;
-    adminProfilePicture: string; // URL to admin's profile picture
+    adminProfilePicture: string;
 }
 
 const AdminAppBar: React.FC<AdminAppBarProps> = ({ adminName, adminProfilePicture }) => {

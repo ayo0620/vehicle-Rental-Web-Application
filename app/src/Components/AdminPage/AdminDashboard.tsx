@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AdminSidebar from "./AdminSidebar";
 import AdminAppBar from "./AdminAppBar";
 import VehicleDashboard from "./VehicleDashboard";
@@ -21,6 +21,26 @@ const AdminDashboard: React.FC = () => {
 
   // State to manage the selected section of the dashboard
   const [selectedSection, setSelectedSection] = useState<string>('dashboard');
+  const [pendingBookingsCount, setPendingBookingsCount] = useState(0);
+
+  // Function to fetch pending bookings count
+  const fetchPendingBookingsCount = async () => {
+    try {
+        const response = await fetch('http://localhost:5001/admin-dashboard/pending-bookings-count', {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+        });
+        const data = await response.json();
+        setPendingBookingsCount(data.count);
+    } catch (error) {
+        console.error('Error fetching pending bookings count:', error);
+    }
+};
+
+useEffect(() => {
+    fetchPendingBookingsCount();
+}, []);
 
   // Function to handle section selection
   const handleSectionSelect = (section: string) => {
@@ -32,7 +52,7 @@ const AdminDashboard: React.FC = () => {
       case 'vehicles':
         return <VehicleDashboard />;
       case 'bookings':
-        return <BookingsDashboard />;
+        return <BookingsDashboard fetchPendingBookingsCount={fetchPendingBookingsCount}/>
       case 'customers':
         return <CustomersDashboard/>;
       case 'analytics':
@@ -45,11 +65,14 @@ const AdminDashboard: React.FC = () => {
   };
 
 
+
   return (
     <div className="AdminDashboard-container">
       <AdminAppBar adminName={adminName} adminProfilePicture={adminProfilePicture}/>
       <div className="MainContainer">
-        <AdminSidebar onSectionSelect={handleSectionSelect}/>
+        <AdminSidebar 
+          onSectionSelect={handleSectionSelect}
+          pendingBookingsCount={pendingBookingsCount}/>
         <div className="MainDashboard">
           {renderDashboardContent()}
         </div>

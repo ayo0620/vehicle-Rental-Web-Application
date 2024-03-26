@@ -61,6 +61,9 @@ const Cards: React.FC = () => {
                 const listingsData = await totalListingsResponse.json() as ListingData[];
                 const processedListingsData = listingsData.map((item: ListingData) => ({ x: item._id, y: item.count }));
 
+                const totalCount = processedListingsData.reduce((total, item) => total + item.y, 0);
+                console.log("Listings count", totalCount)
+
                 const totalRevenueResponse = await fetch('http://localhost:5001/admin-dashboard/total-revenue', {
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -87,7 +90,7 @@ const Cards: React.FC = () => {
                         boxShadow: "0px 10px 20px 0px #e0c6f5",
                     },
                     barValue: 70,
-                    value: listingsData.length.toString(),
+                    value: totalCount.toString(),
                     png: RiTable2,
                     series: [{ name: "Total Listings", data: processedListingsData }],
 
@@ -101,7 +104,7 @@ const Cards: React.FC = () => {
                     },
                     barValue: 80,
                     value: revenueData.reduce((sum, item) => sum + item.total, 0).toFixed(2).toString(),
-                    png: RiMoneyDollarCircleLine, // Replace YourIconComponent with your icon component
+                    png: RiMoneyDollarCircleLine,
                     series: [{ name: "Total Revenue", data: processedRevenueData }],
 
                 };

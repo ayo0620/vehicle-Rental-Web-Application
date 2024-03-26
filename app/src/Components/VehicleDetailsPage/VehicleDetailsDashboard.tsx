@@ -23,6 +23,7 @@ interface LocationState {
 const VehicleDetailsDashbaord: React.FC= () => {
     const { id } = useParams<{ id: string }>();
     const [vehicle, setVehicle] = useState<Vehicle | null>(null);
+    const [userId, setUserId] = useState<string | null>(null); 
     const [pickUpDate, setPickUpDate] = useState<string>('');
     const [returnDate, setReturnDate] = useState<string>('');
     const [pickUpTime, setPickUpTime] = useState<string>('');
@@ -32,16 +33,45 @@ const VehicleDetailsDashbaord: React.FC= () => {
 
     useEffect(() => {
         const fetchVehicleDetails = async () => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                const base64Url = token.split('.')[1]; // Get the payload part
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+            
+                const payload = JSON.parse(jsonPayload);
+                setUserId(payload.userId); // Set userId state
+                console.log("Retrieved userId from token:", payload.userId);
+            }
+
             try {
-                const response = await fetch(`http://localhost:5001/vehicles/${id}`);
+                if (!token) {
+                    console.error('No token found');
+                    return;
+                }
+    
+                const response = await fetch(`http://localhost:5001/vehicles/${id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    }
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Failed to fetch vehicle details');
+                }
+    
                 const data = await response.json();
-                setVehicle(data)
-            } catch(error) {
+                setVehicle(data);
+            } catch (error) {
                 console.error('Error fetching vehicle details:', error);
             }
         };
+    
         fetchVehicleDetails();
     }, [id]);
+    
 
     if(!vehicle) {
         return <div>Loading...</div>
@@ -70,7 +100,7 @@ const VehicleDetailsDashbaord: React.FC= () => {
 
     return (
         <>
-            <img className="vehicle-image" src={vehicle.image}/>
+            <img className="vehicle-image" src={`http://localhost:3000/${vehicle.image}`}/>
             <div className="vehicle-details-container">
                 <div className="vehicle-info">
                     <div className="vehicle-name">
@@ -140,6 +170,9 @@ const VehicleDetailsDashbaord: React.FC= () => {
                         <Link 
                             to={`/vehicleListings/vehicle/checkout/${id}`}
                             state={{
+                                vehicleId: id,
+                                userId: userId,
+                                adminId: vehicle.createdBy,
                                 vehicleImage: vehicle.image,
                                 vehicleName: `${vehicle.make} ${vehicle.model} ${vehicle.year}`,
                                 pickUpDate,

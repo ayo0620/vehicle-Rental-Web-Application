@@ -3,6 +3,7 @@ import { Checkbox, typographyClasses } from "@mui/material";
 import {Slider} from "@mui/material";
 import { Grid } from "@mui/material";
 import { FormControlLabel } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import '../../Styles/VehicleListingsPage/Sidebar.css';
 
 interface Brand {
@@ -27,13 +28,14 @@ const Sidebar: React.FC<sidebarProps> = ({ applyFilters }) => {
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [selectedVehicleTypes, setSelectedVehicleTypes] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 20000]);
+  const navigate = useNavigate();
   
 
   const toggleVehicleType = () => setVehicleTypeOpen(!vehicleTypeOpen);
   const toggleBrand = () => setBrandOpen(!brandOpen);
   const togglePriceRange = () => setPriceRangeOpen(!priceRangeOpen);
 
-  const vehicleTypes = ['car', 'skateboard', 'bicycle', 'motorcycle', 'jet_ski', 'boat'];
+  const vehicleTypes = ['Car', 'Skateboard', 'Bicycle', 'Motorcycle', 'Jet-ski', 'Boat'];
   const brands: Brand[] = [
     { name: 'Toyota', logoUrl: 'https://global.toyota/pages/global_toyota/mobility/toyota-brand/emblem_ogp_001.png'}, 
     { name: 'Honda', logoUrl: 'https://www.carlogos.org/car-logos/honda-logo.png'}, 
@@ -79,6 +81,14 @@ const Sidebar: React.FC<sidebarProps> = ({ applyFilters }) => {
 
     applyFilters(filters);
   };
+
+  const handleLogout = () => {
+    // Clear the authentication token from local storage
+    localStorage.removeItem("token");
+
+    // Redirect to the login page
+    navigate("/");
+};
 
 
 
@@ -152,6 +162,9 @@ const Sidebar: React.FC<sidebarProps> = ({ applyFilters }) => {
 
       {/* Apply Filters Button */}
       <button onClick={applyFiltersHandler}>Apply Filters</button>
+      <div className="logout-button">
+        <button onClick={handleLogout}>logout</button>
+      </div>
     </div>
   );
 };

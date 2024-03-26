@@ -15,7 +15,6 @@ interface vehicleFilters {
 
 interface DecodedTokenPayload {
   exp: number;
-  // Add other properties if needed
 }
 
 
@@ -33,7 +32,7 @@ const VehicleListingsDashboard: React.FC = () => {
 
     try {
 
-      const token = localStorage.getItem('token'); // Retrieve token from localStorage
+      const token = localStorage.getItem('token');
       if (!token) {
         console.error('Token not found in localStorage');
         return;
@@ -84,7 +83,23 @@ const VehicleListingsDashboard: React.FC = () => {
 
       console.log('API Request URL:', url.toString());
 
-      const response = await fetch(url.toString());
+      const token = localStorage.getItem('token');
+      if (!token) {
+          console.error('Token not found in localStorage');
+          return;
+      }
+
+      const response = await fetch(url.toString(), {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        }
+      });
+
+      if (!response.ok) {
+        console.error('Error fetching data:', response.statusText);
+        return;
+      }
+
       const data = await response.json();
   
       // Handle the filtered data
