@@ -42,7 +42,7 @@ const LoginPageDashboard: React.FC<LoginPageProps> = ({ onLogin }) => {
           navigate('/adminDashboard');
         }
         else {
-          navigate('/LandingPage');
+          navigate('/vehicleListings');
         }
       } else {
         // Login failed

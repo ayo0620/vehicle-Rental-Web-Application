@@ -17,7 +17,7 @@ const Listings: React.FC<ListingsProps> = ({ vehicles }) => {
 
     return (
         <>
-            <div className="listings">
+            <div className="listings" style={{ maxHeight: '100vh'}}>
                 <div className="listings-grid">
                     {vehicles.map((vehicle) => (
                         <VehicleItem key={vehicle._id} vehicle={vehicle} />

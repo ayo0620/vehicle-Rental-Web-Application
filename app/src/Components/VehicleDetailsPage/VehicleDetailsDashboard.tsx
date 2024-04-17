@@ -96,8 +96,6 @@ const VehicleDetailsDashbaord: React.FC= () => {
 
 
 
-
-
     return (
         <>
             <img className="vehicle-image" src={`http://localhost:3000/${vehicle.image}`}/>

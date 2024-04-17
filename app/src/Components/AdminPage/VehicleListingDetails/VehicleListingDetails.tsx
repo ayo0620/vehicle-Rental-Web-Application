@@ -63,7 +63,7 @@ const VehicleListingDetails: React.FC = () => {
         <div className="vehicle-details-container">
             <div className="top-layer">
                 <div className="vehicle-image-container">
-                    <img src={vehicle.image} alt="Vehicle" className="vehicle-image" />
+                  <img className="vehicle-image" src={`http://localhost:3000/${vehicle.image}`}/>
                 </div>
                 <div className="vehicle-details">
                     <h2>Vehicle Details</h2>

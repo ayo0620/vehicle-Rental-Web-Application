@@ -44,7 +44,7 @@ router.get('/', authenticateUser, async (req, res) => {
     const adminId = req.decodedToken.userId;
 
     try {
-      const vehicles = await Vehicle.find({});
+      const vehicles = await Vehicle.find({ availability: true });
       res.json(vehicles);
     } catch (err) {
       res.status(500).json({ message: err.message });
